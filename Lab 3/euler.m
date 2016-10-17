@@ -1,5 +1,7 @@
 % Euler's method
 
+% heres an edit
+
 % We are trying to numerically evaluate the solution of a
 % first order ODE at some point x using an iterative method given 
 % the first order ODE and some initial approximation of the function (x0, y0) . 
