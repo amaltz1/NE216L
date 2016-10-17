@@ -22,7 +22,7 @@
 
 function [t_out, y_out] = euler(f, t_rng, y0, n)
     %relevant algorithm on slideshow page 44-45
-    
+    %This is a comment
     % Argument Checking
     if ~isa( f, 'function_handle' )
         throw( MException( 'MATLAB:invalid_argument', ...
