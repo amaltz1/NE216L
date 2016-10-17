@@ -22,7 +22,7 @@
 
 function [t_out, y_out] = euler(f, t_rng, y0, n)
     %relevant algorithm on slideshow page 44-45
-    %This is a comment
+    
     % Argument Checking
     if ~isa( f, 'function_handle' )
         throw( MException( 'MATLAB:invalid_argument', ...
@@ -50,7 +50,7 @@ function [t_out, y_out] = euler(f, t_rng, y0, n)
     y_out = zeros(1, n);
     
     y_out(1) = y0;
-    
+    %
     % Initialize a for loop with i ranging from 1 to n-1 where f is used  
     % to calculate the slope at (t_out(i), y_out(i))
     % Set y_out(i+1) as y_out(i) + K * h
