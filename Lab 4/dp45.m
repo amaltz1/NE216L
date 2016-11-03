@@ -1,7 +1,10 @@
 function [t_out, y_out] = dp45( f, t_rng, y0, h, eps_abs )
 %% Function Explanation
 
-
+%Approximates solution of an IVP using a dynamic step size to reduce
+%calculations while maintaining accuracy. The Dormant-Prince method uses a
+%linear combination of seven slope values of the function to deliver an
+%output with an O(h^4) error term.
 
 %% Input and Output Variable Explanation
 
