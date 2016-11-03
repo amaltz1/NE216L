@@ -32,7 +32,6 @@ n_K = 7; %Seven terms in Dormand-Prince method
 
 % Initialize t_out and y_out as integers due to dynamic scaling
 t_out = t_rng(0);
-tf = t_rng(end);
 y_out = y0;
 % Initialize initial index to k = 1
 k = 1;
@@ -50,15 +49,15 @@ while t_out(k) < tf
     z = z_out(k) + h * K * bz;
     %calculate s to see if h needs to be rescaled based on slideshow pg79
     s = ( (h * eps_abs) /(2*(t_rng(end) -t_rng(1)) * abs(y-z)))^(1/4);
-    if s>=1 %if s>=1, continue on to next iteration
-        y_out(k+1) = y; 
+    if s>=1
+        y_out(k+1) = y;
         t_out(k+1) = t_out(k) + h;
         k = k +1;
-        if s>= 2 %if s>=2, still procede to next iteration but increase step size
+        if s>= 2
             h = 2*h;
         end
     else
-        h = h/2; %reduce h by half if size s is too small and repeat iteration with same k value
+        h = h/2;
     end
     if t_out(k) + h > tf
         h = tf -t_out(k); %reduce h is its beyond the desired range
@@ -66,3 +65,30 @@ while t_out(k) < tf
         
  
 end
+% while t_out(k) < tf
+%     Use Dormand Prince to find two approximations
+%     y and z to approximate y(t) at t = t_out(k) + h
+%     for the current value of h
+%
+%     Calculate the scaling factor 's'
+%
+%     if s >= 2,
+%         We use y to approximate y_out(k + 1)
+%         t_out(k + 1) is the previous t-value plus h
+%         Increment k and double the value of h for the
+%         next iteration.
+%     else if s >= 1,
+%         We use y to approximate y_out(k + 1)
+%         t_out(k + 1) is the previous t-value plus h
+%         In this case, h is neither too large or too
+%         small, so only increment k
+%     else s < 1
+%         Divide h by two and try again with the smaller
+%         value of h (just go through the loop again
+%         without updating t_out, y_out, or k)
+%     end
+%
+%     We must make one final check before we end the loop:
+%        if t_out(k) + h > tf, we must reduce the
+%        size of h so that t_out(k) + h == tf
+% end
