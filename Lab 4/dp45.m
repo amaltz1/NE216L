@@ -7,12 +7,37 @@ function [t_out, y_out] = dp45( f, t_rng, y0, h, eps_abs )
 %output with an O(h^4) error term.
 
 %% Input and Output Variable Explanation
+% f : a bivariate function handle of a first order ODE
+% t_rng: range of t values that the ODE will be solved at
+% y0: initial value of the function at t_rng(1)
+% h: initial step size, will be dynamically scaled
+% eps_abs: minimum absolute error in approximation
+
+% t_out: output of t values spaced by dynamic step size (h)
+% y_out: output of y values found using dp45 algorithm
 
 
-
-%% Error caching
-
-
+%% Error checking
+    if ~isa( f, 'function_handle' )
+        throw( MException( 'MATLAB:invalid_argument', ...
+        'the argument f is not a function handle' ) );
+    end
+    if ~all( size( t_rng ) == [1, 2] ) 
+        throw( MException( 'MATLAB:invalid_argument', ...
+        'the argument t_rng is not a 2-dimensional row vector' ) );
+    end
+    if ~isscalar( y0 ) 
+        throw( MException( 'MATLAB:invalid_argument', ...
+        'the argument  is not a scalar' ) );
+    end
+    if ~isscalar( h ) || ~(h > 0)  
+        throw( MException( 'MATLAB:invalid_argument', ...
+        'the argument h is not a positive scalar' ) );
+    end
+    if ~isscalar( eps_abs ) || ~(eps_abs > 0)  
+        throw( MException( 'MATLAB:invalid_argument', ...
+        'the argument h is not a positive scalar' ) );
+    end
 
 %% Constant Integers and Matrices for Dormant-Prince Method
 
@@ -34,7 +59,7 @@ n_K = 7; %Seven terms in Dormand-Prince method
 %% Initialize Variables
 
 % Initialize t_out and y_out as integers due to dynamic scaling
-t_out = t_rng(0);
+t_out = t_rng(1);
 tf = t_rng(end);
 y_out = y0;
 % Initialize initial index to k = 1
@@ -45,12 +70,13 @@ K = zeros(1,n_K);
 
 while t_out(k) < tf
     for m = 1:n_K
-        K(m) = f(t_out(k) + h*c(m), y_out(k) + h*c(m)*K*A(m,:));
+        K(m) = f(t_out(k) + h*c(m), y_out(k) + h*c(m)*K*A(:,m));
         %initialize 1 x 7 K matrix that is used to calculate y and z
     end
+
     %calculate y and z to see if h is an adequate value
     y = y_out(k) + h * K * by;
-    z = z_out(k) + h * K * bz;
+    z = y_out(k) + h * K * bz;
     %calculate s to see if h needs to be rescaled based on slideshow pg79
     s = ( (h * eps_abs) /(2*(t_rng(end) -t_rng(1)) * abs(y-z)))^(1/4);
     if s>=1 %if s>=1, continue on to next iteration
@@ -68,4 +94,5 @@ while t_out(k) < tf
     end
         
  
+end
 end
