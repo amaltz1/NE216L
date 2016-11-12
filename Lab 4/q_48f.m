@@ -1,6 +1,6 @@
 f4c_actual = 2.604215099096980;
 
-k = 6; %number of iterations
+k = 8; %number of iterations
 length_t_out_matrix = zeros(1,k+1);
 abs_error_matrix = zeros(1,k+1);
 for i =0:k
